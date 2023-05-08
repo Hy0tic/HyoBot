@@ -1,5 +1,4 @@
 from discord.ext import commands
-import datetime
 from asyncio import sleep as s
 
 class Remind(commands.Cog):
