@@ -1,0 +1,6 @@
+__pycache__
+.cache
+.upm
+credentials.json
+poetry.lock
+pyproject.toml
