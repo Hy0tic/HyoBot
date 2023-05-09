@@ -12,6 +12,8 @@ BOT = commands.Bot(command_prefix='!!', intents=intents)
 
 @BOT.event
 async def on_ready():
+    await BOT.change_presence(status=discord.Status.online,
+                              activity=discord.Game('with alligators | !!help'))
     print('{0.user} reporting for duty'.format(BOT))
 
 @BOT.event
@@ -26,6 +28,14 @@ async def setup_hook():
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
             await BOT.load_extension(f'cogs.{filename[:-3]}')
+
+@BOT.event
+async def on_presence_update(before, after):
+    game = str(after.activity)
+    userId = after.id
+    user = BOT.get_user(userId)
+    if "overwatch" in game:
+        # await user.send("get off overwatch")
 
 @BOT.command()
 async def ping(ctx):
