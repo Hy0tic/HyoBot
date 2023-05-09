@@ -35,6 +35,7 @@ async def on_presence_update(before, after):
     userId = after.id
     user = BOT.get_user(userId)
     if "overwatch" in game:
+        print("overwatch detected")
         # await user.send("get off overwatch")
 
 @BOT.command()
