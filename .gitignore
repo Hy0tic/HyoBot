@@ -4,3 +4,4 @@ __pycache__
 credentials.json
 poetry.lock
 pyproject.toml
+.scannerwork
