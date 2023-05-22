@@ -1,3 +1,4 @@
 discord.py
 requests
 youtube_dl
+python-dotenv

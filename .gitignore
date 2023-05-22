@@ -5,3 +5,4 @@ credentials.json
 poetry.lock
 pyproject.toml
 .scannerwork
+.env

@@ -1,10 +1,11 @@
 import discord
 import os
-import requests
 import json
+from dotenv import load_dotenv
 from discord.ext import commands
 
 intents = discord.Intents.all()
+env_vars = load_dotenv('.env')
 
 with open('credentials.json', 'r') as file:
     credentials = json.load(file)
@@ -43,4 +44,5 @@ async def ping(ctx):
     await ctx.send('pong')
 
 
-BOT.run(credentials['Token'])
+token = os.environ.get("Token")
+BOT.run(token)
