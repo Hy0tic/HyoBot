@@ -14,30 +14,36 @@ class Emoji(commands.Cog):
 
   @commands.command(help="steal")
   async def steal(self, ctx, msg):
-    custom_emojis = re.findall(r'<:\w*:\d*>', msg)
-
+    custom_emojis = re.findall(r'<a?:[^\s<>:]+:\d+>', msg)
+    pattern = r'<a?:([^\s<>:]+):(\d+)>'
     emojiList = []
-
-    for string in custom_emojis:
-        # Extract the content within the arrow braces using regular expressions
-        match = re.search(r'<:(.*):(.*)>', string)
-        
+    for emoji in custom_emojis:
+        match = re.match(pattern, emoji)
         if match:
-            # Retrieve the captured groups from the match object
-            group1 = match.group(1)
-            group2 = match.group(2)
-            
-            # Append the formatted parts to the new list
-            emojiList.append([group1, group2])
+            name = match.group(1)
+            emoji_id = match.group(2)
+            animated = emoji.startswith('<a:')
+            emojiList.append([name, emoji_id, animated])
 
-    os.makedirs("./cogs/TempImageFolder")
+    print(emojiList)
+
+    try:
+        os.makedirs("./cogs/TempImageFolder")
+    except:
+        pass
+
     for emoji in emojiList:
         name = emoji[0]
         emojiId = emoji[1]
-        
-        url = "https://cdn.discordapp.com/emojis/" + emojiId + ".webp?size=40&quality=lossless"
+        isAnimated = emoji[2]
+
+        extension = ".gif" if isAnimated else ".png"
+        urlExtension = ".gif" if isAnimated else ".webp"
+        url = "https://cdn.discordapp.com/emojis/" + emojiId + urlExtension + "?size=40&quality=lossless"
+        print("url:" + url)
         path = "./cogs/TempImageFolder"
-        filename = name + ".png"
+
+        filename = name + extension
         download_image(url, path, filename)
 
         server = ctx.guild
