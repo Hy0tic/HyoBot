@@ -68,5 +68,5 @@ jobs:
             docker stop Hyobot
             docker rm Hyobot
             docker pull ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
-            ls
+            docker run --restart=always -d --name HyoBot --env-file ${{ secrets.SECRET_PATH }} ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
 
