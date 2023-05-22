@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  Test:
+  build:
     runs-on: ubuntu-latest
     environment:
       name: 'Production'
