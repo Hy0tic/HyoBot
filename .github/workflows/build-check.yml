@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  Test:
     runs-on: ubuntu-latest
     environment:
       name: 'Production'
@@ -41,19 +41,47 @@ jobs:
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push ${{secrets.DOCKER_USERNAME}}/hyobotdockerrepo
+  
+  build-docker-image:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
 
-  # sonarqube-scan:
-  #   name: scanner
-  #   runs-on: ubuntu-latest
-  #   defaults:
-  #     run:
-  #       working-directory: .
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-  #     - uses: sonarsource/sonarqube-scan-action@master
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: Build docker image
+        run: docker build -t ${{secrets.DOCKER_USERNAME}}/hyobot .
+
+      - name: Log into Docker and upload image
+        env: 
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker push ${{secrets.DOCKER_USERNAME}}/hyobot
+
+  deploy:
+    needs: [ build, build-docker-image ]
+    environment:
+      name: 'Production'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into VPS, pull docker image and run the image
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PROD_SSH_HOST }}
+          username: ${{ secrets.PROD_SSH_USER }}
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          script: |
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            docker stop Hyobot
+            docker rm Hyobot
+            docker pull ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
+            ls
+            # docker run --restart=always -d --network=host --name HyoBot --env-file ${{ secrets.SECRET_PATH }} ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
+
