@@ -45,24 +45,7 @@ class Emoji(commands.Cog):
             emoji_data = file.read()
         await server.create_custom_emoji(name=name, image=emoji_data)
         os.remove("./cogs/TempImageFolder/" + filename)
-
-
-    # for i in emojiList:
-    #     url = "https://cdn.discordapp.com/emojis/" + value + ".webp?size=40&quality=lossless"
-    #     path = "./TempImageFolder"
-    #     filename = key + ".png"
-    #     download_image(url, path, filename)
-
-    #     emojiName = key
-    #     server = ctx.guild
-    #     with open(filename, "rb") as file:
-    #         emoji_data = file.read()
-    #     await server.create_custom_emoji(name=emojiName, image=emoji_data)
         
-
-    
-
-
 async def setup(BOT):
   await BOT.add_cog(Emoji(BOT))  
 
