@@ -1,4 +1,4 @@
-name: Test and Upload Image to Docker
+name: Build,Test and Deploy
 
 on:
   push:
@@ -83,5 +83,4 @@ jobs:
             docker rm Hyobot
             docker pull ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
             ls
-            # docker run --restart=always -d --network=host --name HyoBot --env-file ${{ secrets.SECRET_PATH }} ${{ secrets.DOCKER_USERNAME }}/hyobot:latest
 
