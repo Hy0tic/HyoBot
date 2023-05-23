@@ -39,7 +39,7 @@ class Emoji(commands.Cog):
 
         extension = ".gif" if isAnimated else ".png"
         urlExtension = ".gif" if isAnimated else ".webp"
-        url = "https://cdn.discordapp.com/emojis/" + emojiId + urlExtension + "?size=40&quality=lossless"
+        url = "https://cdn.discordapp.com/emojis/" + emojiId + urlExtension
         print("url:" + url)
         path = "./cogs/TempImageFolder"
 
