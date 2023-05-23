@@ -7,8 +7,8 @@ from discord.ext import commands
 intents = discord.Intents.all()
 env_vars = load_dotenv('.env')
 
-with open('credentials.json', 'r') as file:
-    credentials = json.load(file)
+# with open('credentials.json', 'r') as file:
+#     credentials = json.load(file)
 BOT = commands.Bot(command_prefix='!!', intents=intents)
 
 @BOT.event
