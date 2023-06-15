@@ -1,4 +1,5 @@
 # HyoBot
+Discord Bot that can import emojies from external server
 
 ## Setting Up Locally
 ```
