@@ -31,7 +31,7 @@ class RoleReact(commands.Cog):
         if message.author != commandAuthor:
             return
 
-        parts = message.split(' | ')
+        parts = message.content.split(' | ')
         title = parts[0]
         description = parts[1]
 
@@ -41,18 +41,28 @@ class RoleReact(commands.Cog):
         else:
             pass # message title and description
 
-        await ctx.send(f"Alright I got the title and the description:\n ```{message.content}```\n Would you like the message to have a color?")
+        await ctx.send(f"Alright I got the title and the description:\n ```{title} | {description}```\n Would you like the message to have a color? Pick a color here https://htmlcolorcodes.com/color-picker/")
 
-
-        print("handling reaction message")
         self.BOT.remove_listener(handleReactionMessage, 'on_message')
-        await ctx.send("The format for adding roles is emoji then name of the role. when you're done, type 'done'")
-        self.BOT.add_listener(handleRoleCreation, 'on_message')
-    
-    async def handleRoleCreation(message):
-        if message.author != commandAuthor:
-            return
-        color = message.content
+
+        async def handleMessageColor(title, description, message):
+            if message.author != commandAuthor:
+                return
+
+            color = '#ffffff'
+            if (message.content == "no"):
+              pass
+            else:
+              color = message.content
+            print()
+            
+            embed = discord.Embed(title=title, description=description, color=color)
+            await ctx.send("Alright, the message will look like this:")
+            await ctx.send(embed = embed)
+            await ctx.send("The format for adding roles is emoji then name of the role. when you're done, type 'done'")
+        
+        self.BOT.add_listener(handleMessageColor, 'on_message', args=(title,description))
+        
 
     self.BOT.add_listener(handleChannel, 'on_message')
 
