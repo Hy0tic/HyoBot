@@ -4,8 +4,11 @@
 
 Discord Bot that can import emojies from external server
 
-## Setting Up Locally
+## Local Development
 ```
 git pull https://github.com/Hy0tic/HyoBot.git
+python -m venv myenv
+myenv\Scripts\activate
+pip install -r requirements.txt
 py main.py
 ```
