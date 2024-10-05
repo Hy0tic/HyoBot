@@ -44,12 +44,27 @@ class Emoji(commands.Cog):
         path = "./cogs/TempImageFolder"
 
         filename = name + extension
-        download_image(url, path, filename)
+        try:
+          download_image(url, path, filename)
+        except:
+          await ctx.send(f"{ctx.author.mention} Failed to download emoji")
+          return
 
         server = ctx.guild
-        with open("./cogs/TempImageFolder/" + filename, "rb") as file:
-            emoji_data = file.read()
-        await server.create_custom_emoji(name=name, image=emoji_data)
+        try: 
+          with open("./cogs/TempImageFolder/" + filename, "rb") as file:
+              emoji_data = file.read()
+        except:
+          await ctx.send(f"{ctx.author.mention} Failed to read file")
+          os.remove("./cogs/TempImageFolder/" + filename)
+          return
+           
+        try:
+          await server.create_custom_emoji(name=name, image=emoji_data)
+          await ctx.send(f"{ctx.author.mention} Emoji Created")
+        except:
+          await ctx.send(f"{ctx.author.mention} Failed to create emoji")
+
         os.remove("./cogs/TempImageFolder/" + filename)
         
 async def setup(BOT):
